@@ -1,0 +1,62 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define SIZE 10
+struct HashNode {
+int key;
+int value;
+struct HashNode* next;
+};
+struct HashNode* createHashNode(int key, int value) {
+struct HashNode* newNode = (struct HashNode*)malloc(sizeof(struct HashNode));
+newNode->key = key;
+newNode->value = value;
+newNode->next = NULL;
+return newNode;
+}
+struct HashNode** createHashTable() {
+struct HashNode** table = (struct HashNode**)malloc(SIZE * sizeof(struct HashNode*));
+for (int i = 0; i < SIZE; i++) {
+table[i] = NULL;
+}
+return table;
+}
+int hashCode(int key) {
+return key % SIZE;
+}
+void insertClosedAddressing(struct HashNode** table, int key, int value) {
+int index = hashCode(key);
+if (table[index] == NULL) {
+table[index] = createHashNode(key, value);
+} else {
+struct HashNode* newNode = createHashNode(key, value);
+newNode->next = table[index];
+table[index] = newNode;
+}
+}
+void displayHashTable(struct HashNode** table) {
+printf("Hash Table:\n");
+for (int i = 0; i < SIZE; i++) {
+struct HashNode* current = table[i];
+printf("Index %d: ", i);
+while (current != NULL) {
+printf("Key = %d, Value = %d -> ", current->key, current->value);
+current = current->next;
+}
+printf("NULL\n");
+}
+}
+int main() {
+struct HashNode** hashTable = createHashTable();
+insertClosedAddressing(hashTable, 5, 10);
+insertClosedAddressing(hashTable, 15, 20);
+insertClosedAddressing(hashTable, 25, 30);
+insertClosedAddressing(hashTable, 35, 40);
+insertClosedAddressing(hashTable, 45, 50);
+insertClosedAddressing(hashTable, 55, 60);
+insertClosedAddressing(hashTable, 65, 70);
+insertClosedAddressing(hashTable, 75, 80);
+insertClosedAddressing(hashTable, 85, 90);
+insertClosedAddressing(hashTable, 95, 100);
+displayHashTable(hashTable);
+return 0;
+}
